@@ -1,0 +1,87 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  apivendedor:
+    host: localhost
+    paths: 
+      - '/vendedor/usuarios'
+      - '/vendedor/imagen'
+      - '/vendedor/historial/:id'
+      - '/vendedor/historial/aprovado/:id'
+      - '/vendedor/pedidos/:id'
+      - '/vendedor/pedido/actualizar/:id'
+      - '/vendedor/busqueda/publicasion'
+      - '/vendedor/busqueda/vededores'
+      - '/vendedor/actualizar/producto/:id'
+      - '/vendedor/verificar/vendedor/:id'
+      - '/vendedor/busqueda/:id'
+      - '/vendedor/publicasion/busqueda/:id'
+      - '/vendedor/inicioSesion'
+      - '/vendedor/registro'
+      - '/vendedor/producto/Registro'
+      - '/vendedor/actualizar/:id'
+      - '/vendedor/eliminar/:id'
+      - '/vendedor/producto/eliminar/:id'
+  apicomprador:
+    host: localhost
+    paths:
+      - '/comprador/usuarios'
+      - '/comprador/inicio'
+      - '/comprador/busqueda/:titulo'
+      - '/comprador/historia/comprador/:id'
+      - '/comprador/categorias/:estado'
+      - '/comprador/categorias'
+      - '/comprador/busqueda/estado/:estado'
+      - '/comprador/compra/:id'
+      - '/comprador/carrito/obtenerDatos/:id'
+      - '/comprador/obtenerDatos/:id'
+      - '/comprador/inicioSesion'
+      - '/comprador/Registro'
+      - '/comprador/carrito/Registro'
+      - '/comprador/direccion/Registrase'
+      - '/comprador/direccion/Editar/:id'
+      - '/comprador/Editar/:id'
+      - '/comprador/Eliminar/:id'
+      - '/comprador/direccion/obtenerDatos/:id'
+      - '/comprador/direccion/Eliminar/:id'
+      - '/comprador/carrito/Eliminar/:id'
+      - '/comprador/busqueda/producto/:categoria'
+      - '/comprador/busqueda/unestado/:categoria'
+serviceEndpoints:
+  vendedorService:
+    url: 'http://44.216.178.226:80'
+  compradorService:
+    url: 'http://52.72.69.9:80'
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  vendedorPipeline:
+    apiEndpoints:
+      - apivendedor
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: vendedorService 
+              changeOrigin: true
+  compradorPipeline:
+    apiEndpoints:
+      - apicomprador
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: compradorService 
+              changeOrigin: true
